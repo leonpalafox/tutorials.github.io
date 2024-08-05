@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carry Trade Explained: Interactive Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            color: #333;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .explanation {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: inline-block;
+            width: 250px;
+            font-weight: bold;
+        }
+        input {
+            width: 120px;
+            padding: 5px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #results {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .result-item {
+            margin-bottom: 10px;
+        }
+        .result-explanation {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Carry Trade Explained: Interactive Calculator</h1>
+    
+    <div class="explanation">
+        <h2>What is a Carry Trade?</h2>
+        <p>A carry trade is a strategy where an investor borrows money in a low-interest-rate currency and invests it in a high-interest-rate currency. The goal is to profit from the interest rate differential between the two currencies. However, this strategy carries risks, particularly from exchange rate fluctuations.</p>
+    </div>
+
+    <h2>Carry Trade Calculator</h2>
+    <p>Use this calculator to see how a carry trade might work. In this example, we're borrowing Japanese Yen (low interest rate) and investing in Mexican Peso (higher interest rate).</p>
+
+    <div class="input-group">
+        <label for="investment">Investment Amount (Yen):</label>
+        <input type="number" id="investment" value="10000000">
+        <div class="result-explanation">The amount of Yen you're borrowing to invest.</div>
+    </div>
+    
+    <div class="input-group">
+        <label for="initialExchangeRate">Initial Exchange Rate (USD/Yen):</label>
+        <input type="number" id="initialExchangeRate" value="0.0069" step="0.0001">
+        <div class="result-explanation">How many USD you get for 1 Yen at the start of the trade.</div>
+    </div>
+    
+    <div class="input-group">
+        <label for="finalExchangeRate">Final Exchange Rate (USD/Yen):</label>
+        <input type="number" id="finalExchangeRate" value="0.0075" step="0.0001">
+        <div class="result-explanation">How many USD you get for 1 Yen at the end of the trade. If this number is larger than the initial rate, the Yen has strengthened.</div>
+    </div>
+    
+    <div class="input-group">
+        <label for="japanInterestRate">Japan Interest Rate:</label>
+        <input type="number" id="japanInterestRate" value="0.01" step="0.001">
+        <div class="result-explanation">The interest rate you pay on your Yen loan.</div>
+    </div>
+    
+    <div class="input-group">
+        <label for="mexicoInterestRate">Mexico Interest Rate:</label>
+        <input type="number" id="mexicoInterestRate" value="0.08" step="0.001">
+        <div class="result-explanation">The interest rate you earn on your investment in Mexico.</div>
+    </div>
+    
+    <button onclick="calculate()">Calculate Carry Trade</button>
+    
+    <div id="results"></div>
+
+    <script>
+        function calculate() {
+            const investment = parseFloat(document.getElementById('investment').value);
+            const initialExchangeRate = parseFloat(document.getElementById('initialExchangeRate').value);
+            const finalExchangeRate = parseFloat(document.getElementById('finalExchangeRate').value);
+            const japanInterestRate = parseFloat(document.getElementById('japanInterestRate').value);
+            const mexicoInterestRate = parseFloat(document.getElementById('mexicoInterestRate').value);
+
+            const usdAmount = investment * initialExchangeRate;
+            const mexicoReturn = usdAmount * (1 + mexicoInterestRate);
+            const finalYenAmount = mexicoReturn / finalExchangeRate;
+            const yenInterestOwed = investment * japanInterestRate;
+            const profitLossYen = finalYenAmount - investment - yenInterestOwed;
+            const profitLossUsd = profitLossYen * finalExchangeRate;
+            const roi = (profitLossYen / investment) * 100;
+
+            const results = `
+                <h2>Carry Trade Results:</h2>
+                <div class="result-item">
+                    <p>Initial USD amount: $${usdAmount.toFixed(2)}</p>
+                    <div class="result-explanation">This is how much USD you get after converting your borrowed Yen.</div>
+                </div>
+                <div class="result-item">
+                    <p>USD amount after 1 year in Mexico: $${mexicoReturn.toFixed(2)}</p>
+                    <div class="result-explanation">This is how much your investment grows to after earning the higher Mexican interest rate.</div>
+                </div>
+                <div class="result-item">
+                    <p>Final yen amount: ¥${finalYenAmount.toFixed(2)}</p>
+                    <div class="result-explanation">This is how much Yen you end up with after converting your investment back to Yen.</div>
+                </div>
+                <div class="result-item">
+                    <p>Interest owed on yen loan: ¥${yenInterestOwed.toFixed(2)}</p>
+                    <div class="result-explanation">This is how much interest you need to pay on your original Yen loan.</div>
+                </div>
+                <div class="result-item">
+                    <p>Profit/Loss in yen: ¥${profitLossYen.toFixed(2)}</p>
+                    <div class="result-explanation">This is your total profit or loss in Yen, after accounting for the loan interest.</div>
+                </div>
+                <div class="result-item">
+                    <p>Profit/Loss in USD: $${profitLossUsd.toFixed(2)}</p>
+                    <div class="result-explanation">This is your total profit or loss converted to USD.</div>
+                </div>
+                <div class="result-item">
+                    <p>Return on Investment: ${roi.toFixed(2)}%</p>
+                    <div class="result-explanation">This is your percentage return on the original investment amount.</div>
+                </div>
+                <div class="explanation">
+                    <h3>Understanding the Results:</h3>
+                    <p>If the final profit is positive, your carry trade was successful. You earned more from the higher interest rate in Mexico than you lost from the Yen loan interest and any currency fluctuations.</p>
+                    <p>If the final profit is negative, your carry trade resulted in a loss. This could be because the Yen strengthened too much against the dollar, wiping out the interest rate advantage.</p>
+                    <p>Try adjusting the exchange rates to see how currency fluctuations affect your profit!</p>
+                </div>
+            `;
+
+            document.getElementById('results').innerHTML = results;
+        }
+
+        // Initial calculation
+        calculate();
+    </script>
+</body>
+</html>
