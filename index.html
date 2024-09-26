@@ -1,158 +1,173 @@
-import React, { useState } from 'react';
-import { Card, CardHeader, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { AlertCircle, CheckCircle } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build vs Buy Decision Tree Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.22.20/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Additional custom styles can be added here if needed */
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div id="root"></div>
 
-const decisionTree = {
-  root: {
-    question: "What's your primary concern?",
-    options: [
-      { text: "Initial Cost", next: "initialCost" },
-      { text: "Customization", next: "customization" },
-      { text: "Time-to-Market", next: "timeToMarket" },
-      { text: "Maintenance", next: "maintenance" },
-      { text: "Data Privacy", next: "dataPrivacy" },
-      { text: "Vendor Dependence", next: "vendorDependence" },
-      { text: "Long-term Cost", next: "longTermCost" },
-      { text: "Competitive Advantage", next: "competitiveAdvantage" }
-    ]
-  },
-  initialCost: {
-    question: "Are you willing to make a significant upfront investment?",
-    options: [
-      { text: "Yes", result: "Build (In-house)" },
-      { text: "No", result: "Buy (External/Pre-built)" }
-    ]
-  },
-  customization: {
-    question: "Do you need high levels of customization?",
-    options: [
-      { text: "Yes", result: "Build (In-house)" },
-      { text: "No", result: "Buy (External/Pre-built)" }
-    ]
-  },
-  timeToMarket: {
-    question: "Is quick deployment a priority?",
-    options: [
-      { text: "Yes", result: "Buy (External/Pre-built)" },
-      { text: "No", result: "Build (In-house)" }
-    ]
-  },
-  maintenance: {
-    question: "Are you prepared to handle ongoing maintenance internally?",
-    options: [
-      { text: "Yes", result: "Build (In-house)" },
-      { text: "No", result: "Buy (External/Pre-built)" }
-    ]
-  },
-  dataPrivacy: {
-    question: "Is full control over sensitive data critical?",
-    options: [
-      { text: "Yes", result: "Build (In-house)" },
-      { text: "No", result: "Buy (External/Pre-built)" }
-    ]
-  },
-  vendorDependence: {
-    question: "Are you comfortable with relying on vendors for updates?",
-    options: [
-      { text: "Yes", result: "Buy (External/Pre-built)" },
-      { text: "No", result: "Build (In-house)" }
-    ]
-  },
-  longTermCost: {
-    question: "Are you more concerned about long-term or short-term costs?",
-    options: [
-      { text: "Long-term", result: "Build (In-house)" },
-      { text: "Short-term", result: "Buy (External/Pre-built)" }
-    ]
-  },
-  competitiveAdvantage: {
-    question: "Is having a unique, proprietary solution crucial for your competitive edge?",
-    options: [
-      { text: "Yes", result: "Build (In-house)" },
-      { text: "No", result: "Buy (External/Pre-built)" }
-    ]
-  }
-};
+    <script type="text/babel">
+        const { useState } = React;
+        const { Card, CardHeader, CardContent, Button, AlertCircle, CheckCircle } = lucide;
 
-const DecisionTreeDashboard = () => {
-  const [currentNode, setCurrentNode] = useState('root');
-  const [result, setResult] = useState(null);
-  const [path, setPath] = useState([]);
+        // Copy the entire DecisionTreeDashboard component here
+        const decisionTree = {
+            root: {
+                question: "What's your primary concern?",
+                options: [
+                    { text: "Initial Cost", next: "initialCost" },
+                    { text: "Customization", next: "customization" },
+                    { text: "Time-to-Market", next: "timeToMarket" },
+                    { text: "Maintenance", next: "maintenance" },
+                    { text: "Data Privacy", next: "dataPrivacy" },
+                    { text: "Vendor Dependence", next: "vendorDependence" },
+                    { text: "Long-term Cost", next: "longTermCost" },
+                    { text: "Competitive Advantage", next: "competitiveAdvantage" }
+                ]
+            },
+            initialCost: {
+                question: "Are you willing to make a significant upfront investment?",
+                options: [
+                    { text: "Yes", result: "Build (In-house)" },
+                    { text: "No", result: "Buy (External/Pre-built)" }
+                ]
+            },
+            customization: {
+                question: "Do you need high levels of customization?",
+                options: [
+                    { text: "Yes", result: "Build (In-house)" },
+                    { text: "No", result: "Buy (External/Pre-built)" }
+                ]
+            },
+            timeToMarket: {
+                question: "Is quick deployment a priority?",
+                options: [
+                    { text: "Yes", result: "Buy (External/Pre-built)" },
+                    { text: "No", result: "Build (In-house)" }
+                ]
+            },
+            maintenance: {
+                question: "Are you prepared to handle ongoing maintenance internally?",
+                options: [
+                    { text: "Yes", result: "Build (In-house)" },
+                    { text: "No", result: "Buy (External/Pre-built)" }
+                ]
+            },
+            dataPrivacy: {
+                question: "Is full control over sensitive data critical?",
+                options: [
+                    { text: "Yes", result: "Build (In-house)" },
+                    { text: "No", result: "Buy (External/Pre-built)" }
+                ]
+            },
+            vendorDependence: {
+                question: "Are you comfortable with relying on vendors for updates?",
+                options: [
+                    { text: "Yes", result: "Buy (External/Pre-built)" },
+                    { text: "No", result: "Build (In-house)" }
+                ]
+            },
+            longTermCost: {
+                question: "Are you more concerned about long-term or short-term costs?",
+                options: [
+                    { text: "Long-term", result: "Build (In-house)" },
+                    { text: "Short-term", result: "Buy (External/Pre-built)" }
+                ]
+            },
+            competitiveAdvantage: {
+                question: "Is having a unique, proprietary solution crucial for your competitive edge?",
+                options: [
+                    { text: "Yes", result: "Build (In-house)" },
+                    { text: "No", result: "Buy (External/Pre-built)" }
+                ]
+            }
+        };
 
-  const handleOption = (option) => {
-    if (option.result) {
-      setResult(option.result);
-    } else {
-      setCurrentNode(option.next);
-      setPath([...path, { question: decisionTree[currentNode].question, answer: option.text }]);
-    }
-  };
+        const DecisionTreeDashboard = () => {
+            const [currentNode, setCurrentNode] = useState('root');
+            const [result, setResult] = useState(null);
+            const [path, setPath] = useState([]);
 
-  const resetTree = () => {
-    setCurrentNode('root');
-    setResult(null);
-    setPath([]);
-  };
+            const handleOption = (option) => {
+                if (option.result) {
+                    setResult(option.result);
+                } else {
+                    setCurrentNode(option.next);
+                    setPath([...path, { question: decisionTree[currentNode].question, answer: option.text }]);
+                }
+            };
 
-  return (
-    <div className="p-4 max-w-4xl mx-auto">
-      <Card className="mb-4">
-        <CardHeader className="text-2xl font-bold">Build vs Buy Decision Tree</CardHeader>
-        <CardContent>
-          {result ? (
-            <div className="text-center">
-              <h2 className="text-xl font-semibold mb-4">Recommended Decision:</h2>
-              <div className="text-2xl font-bold text-green-600 flex items-center justify-center">
-                <CheckCircle className="mr-2" />
-                {result}
-              </div>
-              <Button onClick={resetTree} className="mt-4">Start Over</Button>
-            </div>
-          ) : (
-            <>
-              <h2 className="text-xl font-semibold mb-4">{decisionTree[currentNode].question}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {decisionTree[currentNode].options.map((option, index) => (
-                  <Button key={index} onClick={() => handleOption(option)} className="text-lg">
-                    {option.text}
-                  </Button>
-                ))}
-              </div>
-            </>
-          )}
-        </CardContent>
-      </Card>
-      
-      {path.length > 0 && (
-        <Card>
-          <CardHeader className="text-xl font-semibold">Your Path</CardHeader>
-          <CardContent>
-            {path.map((step, index) => (
-              <div key={index} className="mb-2">
-                <span className="font-medium">{step.question}</span>
-                <span className="ml-2 text-green-600">{step.answer}</span>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
-      
-      <Card className="mt-4">
-        <CardHeader className="text-xl font-semibold flex items-center">
-          <AlertCircle className="mr-2 text-yellow-500" />
-          Important Considerations
-        </CardHeader>
-        <CardContent>
-          <ul className="list-disc pl-5">
-            <li>This decision tree provides a simplified guide and should not be the sole basis for your decision.</li>
-            <li>Consider consulting with experts and stakeholders before making a final decision.</li>
-            <li>Your specific context and requirements may influence the best choice for your organization.</li>
-          </ul>
-        </CardContent>
-      </Card>
-    </div>
-  );
-};
+            const resetTree = () => {
+                setCurrentNode('root');
+                setResult(null);
+                setPath([]);
+            };
 
-export default DecisionTreeDashboard;
+            return (
+                <div className="p-4 max-w-4xl mx-auto">
+                    <div className="bg-white shadow-md rounded-lg p-6 mb-4">
+                        <h1 className="text-2xl font-bold mb-4">Build vs Buy Decision Tree</h1>
+                        {result ? (
+                            <div className="text-center">
+                                <h2 className="text-xl font-semibold mb-4">Recommended Decision:</h2>
+                                <div className="text-2xl font-bold text-green-600 flex items-center justify-center">
+                                    <CheckCircle className="mr-2" />
+                                    {result}
+                                </div>
+                                <button onClick={resetTree} className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Start Over</button>
+                            </div>
+                        ) : (
+                            <>
+                                <h2 className="text-xl font-semibold mb-4">{decisionTree[currentNode].question}</h2>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {decisionTree[currentNode].options.map((option, index) => (
+                                        <button key={index} onClick={() => handleOption(option)} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                            {option.text}
+                                        </button>
+                                    ))}
+                                </div>
+                            </>
+                        )}
+                    </div>
+                    
+                    {path.length > 0 && (
+                        <div className="bg-white shadow-md rounded-lg p-6 mb-4">
+                            <h2 className="text-xl font-semibold mb-4">Your Path</h2>
+                            {path.map((step, index) => (
+                                <div key={index} className="mb-2">
+                                    <span className="font-medium">{step.question}</span>
+                                    <span className="ml-2 text-green-600">{step.answer}</span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                    
+                    <div className="bg-white shadow-md rounded-lg p-6">
+                        <h2 className="text-xl font-semibold mb-4 flex items-center">
+                            <AlertCircle className="mr-2 text-yellow-500" />
+                            Important Considerations
+                        </h2>
+                        <ul className="list-disc pl-5">
+                            <li>This decision tree provides a simplified guide and should not be the sole basis for your decision.</li>
+                            <li>Consider consulting with experts and stakeholders before making a final decision.</li>
+                            <li>Your specific context and requirements may influence the best choice for your organization.</li>
+                        </ul>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<DecisionTreeDashboard />);
+    </script>
+</body>
+</html>
