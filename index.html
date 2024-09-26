@@ -1,170 +1,158 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carry Trade Explained: Interactive Calculator</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-            color: #333;
-        }
-        h1, h2 {
-            color: #2c3e50;
-        }
-        .explanation {
-            background-color: #f0f0f0;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        .input-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: inline-block;
-            width: 250px;
-            font-weight: bold;
-        }
-        input {
-            width: 120px;
-            padding: 5px;
-        }
-        button {
-            background-color: #3498db;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
-        #results {
-            margin-top: 20px;
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 5px;
-        }
-        .result-item {
-            margin-bottom: 10px;
-        }
-        .result-explanation {
-            font-size: 0.9em;
-            color: #666;
-            margin-top: 5px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Carry Trade Explained: Interactive Calculator</h1>
-    
-    <div class="explanation">
-        <h2>What is a Carry Trade?</h2>
-        <p>A carry trade is a strategy where an investor borrows money in a low-interest-rate currency and invests it in a high-interest-rate currency. The goal is to profit from the interest rate differential between the two currencies. However, this strategy carries risks, particularly from exchange rate fluctuations.</p>
+import React, { useState } from 'react';
+import { Card, CardHeader, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { AlertCircle, CheckCircle } from 'lucide-react';
+
+const decisionTree = {
+  root: {
+    question: "What's your primary concern?",
+    options: [
+      { text: "Initial Cost", next: "initialCost" },
+      { text: "Customization", next: "customization" },
+      { text: "Time-to-Market", next: "timeToMarket" },
+      { text: "Maintenance", next: "maintenance" },
+      { text: "Data Privacy", next: "dataPrivacy" },
+      { text: "Vendor Dependence", next: "vendorDependence" },
+      { text: "Long-term Cost", next: "longTermCost" },
+      { text: "Competitive Advantage", next: "competitiveAdvantage" }
+    ]
+  },
+  initialCost: {
+    question: "Are you willing to make a significant upfront investment?",
+    options: [
+      { text: "Yes", result: "Build (In-house)" },
+      { text: "No", result: "Buy (External/Pre-built)" }
+    ]
+  },
+  customization: {
+    question: "Do you need high levels of customization?",
+    options: [
+      { text: "Yes", result: "Build (In-house)" },
+      { text: "No", result: "Buy (External/Pre-built)" }
+    ]
+  },
+  timeToMarket: {
+    question: "Is quick deployment a priority?",
+    options: [
+      { text: "Yes", result: "Buy (External/Pre-built)" },
+      { text: "No", result: "Build (In-house)" }
+    ]
+  },
+  maintenance: {
+    question: "Are you prepared to handle ongoing maintenance internally?",
+    options: [
+      { text: "Yes", result: "Build (In-house)" },
+      { text: "No", result: "Buy (External/Pre-built)" }
+    ]
+  },
+  dataPrivacy: {
+    question: "Is full control over sensitive data critical?",
+    options: [
+      { text: "Yes", result: "Build (In-house)" },
+      { text: "No", result: "Buy (External/Pre-built)" }
+    ]
+  },
+  vendorDependence: {
+    question: "Are you comfortable with relying on vendors for updates?",
+    options: [
+      { text: "Yes", result: "Buy (External/Pre-built)" },
+      { text: "No", result: "Build (In-house)" }
+    ]
+  },
+  longTermCost: {
+    question: "Are you more concerned about long-term or short-term costs?",
+    options: [
+      { text: "Long-term", result: "Build (In-house)" },
+      { text: "Short-term", result: "Buy (External/Pre-built)" }
+    ]
+  },
+  competitiveAdvantage: {
+    question: "Is having a unique, proprietary solution crucial for your competitive edge?",
+    options: [
+      { text: "Yes", result: "Build (In-house)" },
+      { text: "No", result: "Buy (External/Pre-built)" }
+    ]
+  }
+};
+
+const DecisionTreeDashboard = () => {
+  const [currentNode, setCurrentNode] = useState('root');
+  const [result, setResult] = useState(null);
+  const [path, setPath] = useState([]);
+
+  const handleOption = (option) => {
+    if (option.result) {
+      setResult(option.result);
+    } else {
+      setCurrentNode(option.next);
+      setPath([...path, { question: decisionTree[currentNode].question, answer: option.text }]);
+    }
+  };
+
+  const resetTree = () => {
+    setCurrentNode('root');
+    setResult(null);
+    setPath([]);
+  };
+
+  return (
+    <div className="p-4 max-w-4xl mx-auto">
+      <Card className="mb-4">
+        <CardHeader className="text-2xl font-bold">Build vs Buy Decision Tree</CardHeader>
+        <CardContent>
+          {result ? (
+            <div className="text-center">
+              <h2 className="text-xl font-semibold mb-4">Recommended Decision:</h2>
+              <div className="text-2xl font-bold text-green-600 flex items-center justify-center">
+                <CheckCircle className="mr-2" />
+                {result}
+              </div>
+              <Button onClick={resetTree} className="mt-4">Start Over</Button>
+            </div>
+          ) : (
+            <>
+              <h2 className="text-xl font-semibold mb-4">{decisionTree[currentNode].question}</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {decisionTree[currentNode].options.map((option, index) => (
+                  <Button key={index} onClick={() => handleOption(option)} className="text-lg">
+                    {option.text}
+                  </Button>
+                ))}
+              </div>
+            </>
+          )}
+        </CardContent>
+      </Card>
+      
+      {path.length > 0 && (
+        <Card>
+          <CardHeader className="text-xl font-semibold">Your Path</CardHeader>
+          <CardContent>
+            {path.map((step, index) => (
+              <div key={index} className="mb-2">
+                <span className="font-medium">{step.question}</span>
+                <span className="ml-2 text-green-600">{step.answer}</span>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+      
+      <Card className="mt-4">
+        <CardHeader className="text-xl font-semibold flex items-center">
+          <AlertCircle className="mr-2 text-yellow-500" />
+          Important Considerations
+        </CardHeader>
+        <CardContent>
+          <ul className="list-disc pl-5">
+            <li>This decision tree provides a simplified guide and should not be the sole basis for your decision.</li>
+            <li>Consider consulting with experts and stakeholders before making a final decision.</li>
+            <li>Your specific context and requirements may influence the best choice for your organization.</li>
+          </ul>
+        </CardContent>
+      </Card>
     </div>
+  );
+};
 
-    <h2>Carry Trade Calculator</h2>
-    <p>Use this calculator to see how a carry trade might work. In this example, we're borrowing Japanese Yen (low interest rate) and investing in Mexican Peso (higher interest rate).</p>
-
-    <div class="input-group">
-        <label for="investment">Investment Amount (Yen):</label>
-        <input type="number" id="investment" value="10000000">
-        <div class="result-explanation">The amount of Yen you're borrowing to invest.</div>
-    </div>
-    
-    <div class="input-group">
-        <label for="initialExchangeRate">Initial Exchange Rate (USD/Yen):</label>
-        <input type="number" id="initialExchangeRate" value="0.0069" step="0.0001">
-        <div class="result-explanation">How many USD you get for 1 Yen at the start of the trade.</div>
-    </div>
-    
-    <div class="input-group">
-        <label for="finalExchangeRate">Final Exchange Rate (USD/Yen):</label>
-        <input type="number" id="finalExchangeRate" value="0.0075" step="0.0001">
-        <div class="result-explanation">How many USD you get for 1 Yen at the end of the trade. If this number is larger than the initial rate, the Yen has strengthened.</div>
-    </div>
-    
-    <div class="input-group">
-        <label for="japanInterestRate">Japan Interest Rate:</label>
-        <input type="number" id="japanInterestRate" value="0.01" step="0.001">
-        <div class="result-explanation">The interest rate you pay on your Yen loan.</div>
-    </div>
-    
-    <div class="input-group">
-        <label for="mexicoInterestRate">Mexico Interest Rate:</label>
-        <input type="number" id="mexicoInterestRate" value="0.08" step="0.001">
-        <div class="result-explanation">The interest rate you earn on your investment in Mexico.</div>
-    </div>
-    
-    <button onclick="calculate()">Calculate Carry Trade</button>
-    
-    <div id="results"></div>
-
-    <script>
-        function calculate() {
-            const investment = parseFloat(document.getElementById('investment').value);
-            const initialExchangeRate = parseFloat(document.getElementById('initialExchangeRate').value);
-            const finalExchangeRate = parseFloat(document.getElementById('finalExchangeRate').value);
-            const japanInterestRate = parseFloat(document.getElementById('japanInterestRate').value);
-            const mexicoInterestRate = parseFloat(document.getElementById('mexicoInterestRate').value);
-
-            const usdAmount = investment * initialExchangeRate;
-            const mexicoReturn = usdAmount * (1 + mexicoInterestRate);
-            const finalYenAmount = mexicoReturn / finalExchangeRate;
-            const yenInterestOwed = investment * japanInterestRate;
-            const profitLossYen = finalYenAmount - investment - yenInterestOwed;
-            const profitLossUsd = profitLossYen * finalExchangeRate;
-            const roi = (profitLossYen / investment) * 100;
-
-            const results = `
-                <h2>Carry Trade Results:</h2>
-                <div class="result-item">
-                    <p>Initial USD amount: $${usdAmount.toFixed(2)}</p>
-                    <div class="result-explanation">This is how much USD you get after converting your borrowed Yen.</div>
-                </div>
-                <div class="result-item">
-                    <p>USD amount after 1 year in Mexico: $${mexicoReturn.toFixed(2)}</p>
-                    <div class="result-explanation">This is how much your investment grows to after earning the higher Mexican interest rate.</div>
-                </div>
-                <div class="result-item">
-                    <p>Final yen amount: ¥${finalYenAmount.toFixed(2)}</p>
-                    <div class="result-explanation">This is how much Yen you end up with after converting your investment back to Yen.</div>
-                </div>
-                <div class="result-item">
-                    <p>Interest owed on yen loan: ¥${yenInterestOwed.toFixed(2)}</p>
-                    <div class="result-explanation">This is how much interest you need to pay on your original Yen loan.</div>
-                </div>
-                <div class="result-item">
-                    <p>Profit/Loss in yen: ¥${profitLossYen.toFixed(2)}</p>
-                    <div class="result-explanation">This is your total profit or loss in Yen, after accounting for the loan interest.</div>
-                </div>
-                <div class="result-item">
-                    <p>Profit/Loss in USD: $${profitLossUsd.toFixed(2)}</p>
-                    <div class="result-explanation">This is your total profit or loss converted to USD.</div>
-                </div>
-                <div class="result-item">
-                    <p>Return on Investment: ${roi.toFixed(2)}%</p>
-                    <div class="result-explanation">This is your percentage return on the original investment amount.</div>
-                </div>
-                <div class="explanation">
-                    <h3>Understanding the Results:</h3>
-                    <p>If the final profit is positive, your carry trade was successful. You earned more from the higher interest rate in Mexico than you lost from the Yen loan interest and any currency fluctuations.</p>
-                    <p>If the final profit is negative, your carry trade resulted in a loss. This could be because the Yen strengthened too much against the dollar, wiping out the interest rate advantage.</p>
-                    <p>Try adjusting the exchange rates to see how currency fluctuations affect your profit!</p>
-                </div>
-            `;
-
-            document.getElementById('results').innerHTML = results;
-        }
-
-        // Initial calculation
-        calculate();
-    </script>
-</body>
-</html>
+export default DecisionTreeDashboard;
